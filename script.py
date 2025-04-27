@@ -5,22 +5,14 @@ import subprocess
 
 def get_unmounted_partitions():
     output = subprocess.check_output(['lsblk', '-o', 'NAME,MOUNTPOINT,TYPE', '-nr']).decode()
+    output_list = output.strip().split('\n')
     unmounted = []
 
-    for line in output.strip().split('\n'):
-        parts = line.strip().split()
-
-        # Skip if not enough fields
-        if len(parts) < 3:
-            continue
-
-        name = parts[0]
-        mountpoint = parts[1]
-        dev_type = parts[2]
-
-        if dev_type == 'part' and mountpoint == '':
-            unmounted.append(f"/dev/{name}")
-
+    for item in output_list:
+        new_list = item.split()
+        if len(new_list) <= 2 and new_list[1] == 'part':
+            unmounted.append(f"/dev/{new_list[0]}")
+    
     return unmounted
 
 if __name__ == "__main__":
