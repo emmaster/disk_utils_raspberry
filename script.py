@@ -23,3 +23,16 @@ if __name__ == "__main__":
         print("Unmounted partitions:")
         for dev in unmntd:
             print(dev)
+
+    if len(unmntd) > 0:
+        print("Mounting all unmounted partitions...")
+        mount_point = "./mnt/sdcard"
+        for dev in unmntd:
+            try:
+                subprocess.run(['mount', dev, mount_point], check=True)
+                print(f"Mounted {dev} to {mount_point}")
+            except subprocess.CalledProcessError as e:
+                print(f"Error mounting {dev}: {e}")
+        
+
+    
