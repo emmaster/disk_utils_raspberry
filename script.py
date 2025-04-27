@@ -16,6 +16,10 @@ def get_unmounted_partitions():
     return unmounted
 
 if __name__ == "__main__":
-    print("Unmounted partitions:")
-    for dev in get_unmounted_partitions():
-        print(dev)
+    unmntd = get_unmounted_partitions()
+    if len(unmntd) == 0:
+        print("No unmounted partitions found.")
+    else:
+        print("Unmounted partitions:")
+        for dev in unmntd:
+            print(dev)
