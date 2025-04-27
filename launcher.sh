@@ -1,4 +1,4 @@
 #!/bin/sh
 
 echo YEAH!
-python script.pyg
+python script.py
