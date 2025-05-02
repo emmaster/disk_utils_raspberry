@@ -23,6 +23,7 @@ if __name__ == "__main__":
         print_txt_on_LCD("No unmonted\npartitions\nfound")
     else:
         print("Unmounted partitions:")
+        print_txt_on_LCD(f"Found unmounted \npartitions:\n{len(unmntd)}!")
         for dev in unmntd:
             print(dev)
 
@@ -31,7 +32,7 @@ if __name__ == "__main__":
         mount_point = "./mnt/sdcard"
         for dev in unmntd:
             try:
-                subprocess.run(['mount', dev, mount_point], check=True)
+                subprocess.run(['sudo','mount', dev, mount_point], check=True)
                 print(f"Mounted {dev} to {mount_point}")
             except subprocess.CalledProcessError as e:
                 print(f"Error mounting {dev}: {e}")
