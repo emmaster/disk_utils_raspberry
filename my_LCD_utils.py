@@ -38,6 +38,7 @@ def print_txt_on_LCD(text_param, font_size=25):
         # Initialize library.
         disp.Init()
         # Clear display.
+        time.sleep(0.1)
         disp.clear()
 
         # Create blank image for drawing.
@@ -51,7 +52,8 @@ def print_txt_on_LCD(text_param, font_size=25):
 
         image1=image1.rotate(0)
         disp.ShowImage(image1)
-
+        
+        time.sleep(0.1)
         disp.module_exit()
         logging.info("quit:")
     except IOError as e:
