@@ -6,14 +6,17 @@ import os
 import sys 
 import time
 import logging
-import spidev as SPI
 
 sys.path.append("/home/klsnkv/LCD_1.5_Code/RaspberryPi/python")
-from lib import LCD_1inch5
-from PIL import Image,ImageDraw,ImageFont
+
 
 
 def print_txt_on_LCD(text_param, font_size=25):
+
+    import spidev as SPI
+    from lib import LCD_1inch5
+    from PIL import Image,ImageDraw,ImageFont
+
     # Raspberry Pi pin configuration:
     RST = 27
     DC = 25
