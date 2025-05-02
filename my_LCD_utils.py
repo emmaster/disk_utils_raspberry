@@ -27,7 +27,7 @@ def print_txt_on_LCD(text_param, font_size=25):
 
     try:
         # Create a new SPI object each time
-        spi = spidev.SpiDev()
+        spi = SPI.SpiDev()
         spi.open(bus, device)
         spi.max_speed_hz = 10000000
         
