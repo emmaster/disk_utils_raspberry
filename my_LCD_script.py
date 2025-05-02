@@ -43,7 +43,7 @@ try:
     draw.rectangle([(20,10),(70,60)],fill = "WHITE",outline="BLUE")
 
     logging.info("draw text")
-    Font1 = ImageFont.truetype("./Font/Font01.ttf",25)
+    Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf",25)
 
     draw.text((20, 70), "HI CHIZHIK!", font = Font1, fill = (0,0,0))
 
