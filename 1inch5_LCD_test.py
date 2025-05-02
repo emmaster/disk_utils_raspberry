@@ -7,7 +7,7 @@ import time
 import logging
 import spidev as SPI
 sys.path.append("..")
-sys.path.append("/home/klsnkv/LCD_1.5_Code/RaspberryPi/python/lib")
+sys.path.append("/home/klsnkv/LCD_1.5_Code/RaspberryPi/python")
 from lib import LCD_1inch5
 from PIL import Image,ImageDraw,ImageFont
 
@@ -70,7 +70,7 @@ try:
     disp.ShowImage(image1)
     time.sleep(3)
     disp.clear()
-    image = Image.open('../pic/LCD_1inch5.jpg')	
+    image = Image.open('../assets/img_for_display.jpg')
     image = image.rotate(0)
     disp.ShowImage(image)
     time.sleep(3)
