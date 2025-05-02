@@ -26,6 +26,11 @@ def print_txt_on_LCD(text_param, font_size=25):
     logging.basicConfig(level=logging.DEBUG)
 
     try:
+        # Create a new SPI object each time
+        spi = spidev.SpiDev()
+        spi.open(bus, device)
+        spi.max_speed_hz = 10000000
+        
         # display with hardware SPI:
         ''' Warning!!!Don't  creation of multiple displayer objects!!! '''
         #disp = LCD_1inch5.LCD_1inch5(spi=SPI.SpiDev(bus, device),spi_freq=10000000,rst=RST,dc=DC,bl=BL)
