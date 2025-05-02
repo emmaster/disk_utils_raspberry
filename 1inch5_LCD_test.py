@@ -55,9 +55,9 @@ try:
     draw.ellipse((20,65,70,115), fill = (0,255,0))
 
     logging.info("draw text")
-    Font1 = ImageFont.truetype("../Font/Font01.ttf",25)
-    Font2 = ImageFont.truetype("../Font/Font01.ttf",35)
-    Font3 = ImageFont.truetype("../Font/Font02.ttf",32)
+    Font1 = ImageFont.truetype("./Font/Font01.ttf",25)
+    Font2 = ImageFont.truetype("./Font/Font01.ttf",35)
+    Font3 = ImageFont.truetype("./Font/Font02.ttf",32)
 
     draw.rectangle([(0,120),(155,153)],fill = "BLUE")
     draw.text((15, 120), 'Hello world', fill = "RED",font=Font1)
@@ -70,7 +70,7 @@ try:
     disp.ShowImage(image1)
     time.sleep(3)
     disp.clear()
-    image = Image.open('../assets/img_for_display.jpg')
+    image = Image.open('./assets/img_for_display.jpg')
     image = image.rotate(0)
     disp.ShowImage(image)
     time.sleep(3)
