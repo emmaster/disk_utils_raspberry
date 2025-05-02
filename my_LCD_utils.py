@@ -33,8 +33,8 @@ def print_txt_on_LCD(text_param, font_size=25):
         
         # display with hardware SPI:
         ''' Warning!!!Don't  creation of multiple displayer objects!!! '''
-        #disp = LCD_1inch5.LCD_1inch5(spi=SPI.SpiDev(bus, device),spi_freq=10000000,rst=RST,dc=DC,bl=BL)
-        disp = LCD_1inch5.LCD_1inch5()
+        disp = LCD_1inch5.LCD_1inch5(spi=SPI.SpiDev(bus, device),spi_freq=10000000,rst=RST,dc=DC,bl=BL)
+        # disp = LCD_1inch5.LCD_1inch5()
         # Initialize library.
         disp.Init()
         # Clear display.
