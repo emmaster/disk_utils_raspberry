@@ -17,19 +17,20 @@ def get_unmounted_partitions():
     return unmounted
 
 if __name__ == "__main__":
+    mount_point = "./mnt/sdcard"
+    subprocess.run(['sudo', 'umount', mount_point])
     unmntd = get_unmounted_partitions()
     if len(unmntd) == 0:
         print("No unmounted partitions found.")
         print_txt_on_LCD("No unmonted\npartitions\nfound")
     else:
         print("Unmounted partitions:")
-        print_txt_on_LCD(f"Found unmounted \npartitions:\n{len(unmntd)}!")
+        print_txt_on_LCD(f"Found unmounted \npartitions:\n{len(unmntd)} !")
         for dev in unmntd:
             print(dev)
 
     if len(unmntd) > 0:
         print("Mounting all unmounted partitions...")
-        mount_point = "./mnt/sdcard"
         for dev in unmntd:
             try:
                 subprocess.run(['sudo','mount', dev, mount_point], check=True)
