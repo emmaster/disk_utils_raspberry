@@ -12,15 +12,16 @@ sys.path.append("/home/klsnkv/LCD_1.5_Code/RaspberryPi/python")
 from lib import LCD_1inch5
 from PIL import Image,ImageDraw,ImageFont
 
-# Raspberry Pi pin configuration:
-RST = 27
-DC = 25
-BL = 18
-bus = 0 
-device = 0 
-logging.basicConfig(level=logging.DEBUG)
 
 def print_txt_on_LCD(text_param, font_size=25):
+    # Raspberry Pi pin configuration:
+    RST = 27
+    DC = 25
+    BL = 18
+    bus = 0 
+    device = 0 
+    logging.basicConfig(level=logging.DEBUG)
+
     try:
         # display with hardware SPI:
         ''' Warning!!!Don't  creation of multiple displayer objects!!! '''
