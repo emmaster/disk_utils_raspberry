@@ -7,6 +7,7 @@ import time
 import logging
 import spidev as SPI
 sys.path.append("..")
+sys.path.append("/home/klsnkv/LCD_1.5_Code/RaspberryPi/python/lib")
 from lib import LCD_1inch5
 from PIL import Image,ImageDraw,ImageFont
 
