@@ -77,7 +77,7 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None)
 
         if statusbar:
             set_statusbar_on_LCD2(draw, statusbar)
-            cursor[1] += statusbar_height + 2*padding_top_bottom
+            cursor[1] += statusbar_height + 2 * padding_top_bottom
 
         logging.info("draw text")
         Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf",font_size)
