@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     if all_is_mounted:
         print("All directories are mounted")
-        print_txt_on_LCD2(message, font_size = 16, color="GREEN", spinner=5)
+        print_txt_on_LCD2(message, font_size = 16, color="GREEN")
         time.sleep(1)
     else:
         print("Not all directories are mounted")
