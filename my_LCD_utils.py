@@ -9,9 +9,26 @@ import logging
 
 sys.path.append("/home/klsnkv/LCD_1.5_Code/RaspberryPi/python")
 
+def string_for_lcd(text, width=14):
+    if len(text) < width:
+        return text
+    elif len(text.split()[0]) > width:
+        return text.split()[0][:width]+"-" + "\n" + string_for_lcd(text[width:], width)
+    else:
+        words = text.split()
+        line = ""
+        rest = ""
+        line_open = True
+        for word in words:
+            if len(line) + len(word) + 1 <= width and line_open:
+                line += word + " "
+            else:
+                line_open = False
+                rest += word + " "
+        return line + "\n" + string_for_lcd(rest, width)
 
 
-def print_txt_on_LCD(text_param, font_size=25):
+def print_txt_on_LCD(text_param, font_size=25, color="WHITE"):
 
     import spidev as SPI
     from lib import LCD_1inch5
@@ -42,13 +59,18 @@ def print_txt_on_LCD(text_param, font_size=25):
         disp.clear()
 
         # Create blank image for drawing.
-        image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
+        if color == "WHITE":
+                 image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
+        elif color == "GREEN":
+                 image1 = Image.new("RGB", (disp.width,disp.height ), "GREEN")
+        else:
+                 image1 = Image.new("RGB", (disp.width,disp.height ), "RED")
         draw = ImageDraw.Draw(image1)
 
         logging.info("draw text")
         Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf",font_size)
-
-        draw.text((20, 70),text_param, font = Font1, fill = (0,0,0))
+        text_formatted = string_for_lcd(text_param)
+        draw.text((20, 70),text_formatted, font = Font1, fill = (0,0,0))
 
         image1=image1.rotate(0)
         disp.ShowImage(image1)

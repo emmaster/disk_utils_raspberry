@@ -22,10 +22,10 @@ if __name__ == "__main__":
     unmntd = get_unmounted_partitions()
     if len(unmntd) == 0:
         print("No unmounted partitions found.")
-        print_txt_on_LCD("No unmonted\npartitions\nfound")
+        print_txt_on_LCD("No unmonted partitions found",color="RED")
     else:
         print("Unmounted partitions:")
-        print_txt_on_LCD(f"Found unmounted \npartitions:\n{len(unmntd)} !")
+        print_txt_on_LCD(f"Found unmounted partitions: {len(unmntd)} !")
         for dev in unmntd:
             print(dev)
 
@@ -35,6 +35,7 @@ if __name__ == "__main__":
             try:
                 subprocess.run(['sudo','mount', dev, mount_point], check=True)
                 print(f"Mounted {dev} to {mount_point}")
+                print_txt_on_LCD(f"Mounted {dev} to {mount_point}")
             except subprocess.CalledProcessError as e:
                 print(f"Error mounting {dev}: {e}")
         
