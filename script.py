@@ -108,6 +108,7 @@ def copy_files_w_status(src_list, target_subfolder, label ="", max_retries = 3, 
             try:
                 new_full_path = target_subfolder / f.name
                 if new_full_path.exists() and new_full_path.stat().st_size == f.stat().st_size:
+                    copied += 1
                     continue
                 shutil.copy2(f, target_subfolder)
                 copied += 1
