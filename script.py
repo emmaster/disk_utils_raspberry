@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     
 
-    print_txt_on_LCD2("Reached end of\nscript",color="GREEN")
+    print_txt_on_LCD2("Reached end of <br> script",color="GREEN")
         
 
     
