@@ -28,7 +28,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 #statusbar params
 padding_left_right = 20
-padding_top_bottom = 20
+padding_top_bottom = 30
 statusbar_height = 24
 
 disp = None
@@ -77,7 +77,7 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None)
 
         if statusbar:
             set_statusbar_on_LCD2(draw, statusbar, inner_color=color)
-            cursor[1] += statusbar_height + 2 * padding_top_bottom
+            cursor[1] += statusbar_height + padding_top_bottom + 30
 
         logging.info("draw text")
         Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf",font_size)
