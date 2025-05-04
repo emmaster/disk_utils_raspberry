@@ -8,6 +8,7 @@ import sys
 import time
 from pathlib import Path
 import shutil
+import datetime
 
 #### PATHES of NAS #####
 ##### CHICAGO #####
@@ -104,8 +105,49 @@ if __name__ == "__main__":
         arw_files = list(sd_card_dir.rglob('*.ARW'))
         mp4_files = list(sd_card_dir.rglob('*.MP4'))
 
-        msg = f"Found <br> {len(jpg_files)+len(arw_files)} images, <br> {len(mp4_files)} videos (MP4) <br> on SD card"
+        # earliest_jpg_date = datetime.datetime.fromtimestamp(min(jpg_files, key = lambda f: f.stat().st_mtime).stat().st_mtime)
+        # earliest_arw_date = datetime.datetime.fromtimestamp(min(arw_files, key = lambda f: f.stat().st_mtime).stat().st_mtime)
+        # earliest_mp4_date = datetime.datetime.fromtimestamp(min(mp4_files, key = lambda f: f.stat().st_mtime).stat().st_mtime)
+
+        now = datetime.datetime.now()
+        target_folder_name = now.strftime("%Y_%b") + "_byscript"
+
+        msg = f"Found <br> {len(jpg_files)+len(arw_files)} images, <br> {len(mp4_files)} videos (MP4) <br> on SD card. <br> target folder: {target_folder_name}"
         print_txt_on_LCD2(msg, font_size = 25, color="GREEN", spinner_sec = 1)
+
+        if len(jpg_files) == 0 and len(arw_files) == 0 and len(mp4_files) == 0:
+            print("No files to transfer")
+            print_txt_on_LCD2("No files found", font_size = 25, color="YELLOW")
+            sys.exit()
+        
+        
+
+        #### photos #####
+
+        if len(jpg_files) > 0 or len(arw_files) > 0:
+            if (nas_photo_dir / target_folder_name).is_dir():
+                print(f"Folder {target_folder_name} already exists")
+                print_txt_on_LCD2(f"[PHOTOS] Folder {target_folder_name} already exists", font_size = 25, color="YELLOW", spinner_sec= 0.5)
+            else:
+                print(f"Creating folder {target_folder_name} for photos")
+                (nas_photo_dir / target_folder_name).mkdir(parents=True, exist_ok=False)
+                print_txt_on_LCD2(f"[PHOTOS] Created folder {target_folder_name}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+
+        
+        #### videos #####
+        if len(mp4_files) > 0:
+            if (nas_video_dir / target_folder_name).is_dir():
+                print(f"Folder {target_folder_name} already exists")
+                print_txt_on_LCD2(f"[VIDEOS] Folder {target_folder_name}", font_size = 25, color="YELLOW", spinner_sec= 0.5)
+            else:
+                print(f"Creating folder {target_folder_name} for videos")
+                (nas_video_dir / target_folder_name).mkdir(parents=True, exist_ok=False)
+                print_txt_on_LCD2(f"[VIDEOS] Created folder {target_folder_name}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+
+
+        
+
+
     except Exception as e:
         print(f"Error: {e}")
         print_txt_on_LCD2("Error: with finding video/audio files", font_size = 25, color="RED")
