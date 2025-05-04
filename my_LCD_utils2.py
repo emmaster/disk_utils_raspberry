@@ -81,7 +81,11 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None)
 
         logging.info("draw text")
         Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf",font_size)
-        text_formatted = string_for_lcd(text_param)
+        if font_size == 25:
+            line_width = 14
+        elif font_size <25 and font_size > 15:
+            line_width = 18
+        text_formatted = string_for_lcd(text_param, width=line_width)
         draw.text(cursor,text_formatted, font = Font1, fill = (0,0,0))
 
         image1=image1.rotate(0)

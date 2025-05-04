@@ -89,11 +89,11 @@ if __name__ == "__main__":
 
     if all_is_mounted:
         print("All directories are mounted")
-        print_txt_on_LCD2(message,color="GREEN")
+        print_txt_on_LCD2(message, font_size = 16, color="GREEN")
         time.sleep(1)
     else:
         print("Not all directories are mounted")
-        print_txt_on_LCD2(message,color="RED")
+        print_txt_on_LCD2(message, font_size = 16, color="RED")
         time.sleep(1)
         sys.exit()
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     
 
-    print_txt_on_LCD2("Reached end of <br> script",color="GREEN")
+    # print_txt_on_LCD2("Reached end of <br> script",color="GREEN")
         
 
     
