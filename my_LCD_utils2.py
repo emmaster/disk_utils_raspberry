@@ -102,8 +102,8 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None,
         disp.ShowImage(image1)
 
         if spinner_sec:
-              time.sleep(spinner_sec/spinner_status)
-              if spinner_status > 1:
+              time.sleep(spinner_sec/20)
+              if spinner_status >= 1:
                     print_txt_on_LCD2(text_param, font_size=font_size, color=color, statusbar=statusbar, spinner_sec=spinner_sec, spinner_status=spinner_status-1)
 
             
