@@ -10,12 +10,12 @@ import logging
 sys.path.append("/home/klsnkv/LCD_1.5_Code/RaspberryPi/python")
 
 def string_for_lcd(text, width=14):
-    if len(text) < width:
+    words = text.split()
+    if len(text) < width and not "<br>" in text:
         return text
-    elif len(text.split()[0]) > width:
-        return text.split()[0][:width]+"-" + "\n" + string_for_lcd(text[width:], width)
+    elif len(words[0]) > width:
+        return words[0][:width]+"-" + "\n" + string_for_lcd(text[width:], width)
     else:
-        words = text.split()
         line = ""
         rest = ""
         line_open = True
