@@ -99,6 +99,21 @@ if __name__ == "__main__":
         time.sleep(1)
         sys.exit()
 
+    try:
+        jpg_files = list(sd_card_dir.rglob('*.JPG'))
+        arw_files = list(sd_card_dir.rglob('*.ARW'))
+        mp4_files = list(sd_card_dir.rglob('*.MP4'))
+
+        msg = f"Found {len(jpg_files)+len(arw_files)} images, and {len(mp4_files)} videos (MP4) on SD card"
+        print_txt_on_LCD2(msg, font_size = 25, color="GREEN", spinner_sec = 1)
+    except Exception as e:
+        print(f"Error: {e}")
+        print_txt_on_LCD2("Error: with finding video/audio files", font_size = 25, color="RED")
+        sys.exit()
+
+    
+
+
 
 
 
