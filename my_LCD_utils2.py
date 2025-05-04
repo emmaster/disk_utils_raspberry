@@ -25,6 +25,12 @@ bus = 0
 device = 0 
 logging.basicConfig(level=logging.DEBUG)
 
+
+#statusbar params
+padding_left_right = 5
+padding_top_bottom = 10
+statusbar_height = 24
+
 disp = None
 
 try:
@@ -52,7 +58,7 @@ except KeyboardInterrupt:
 
 
 
-def print_txt_on_LCD2(text_param, font_size=25, color="WHITE"):
+def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None):
     
         # Create blank image for drawing.
         if color == "WHITE":
@@ -67,10 +73,16 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE"):
                  image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
         draw = ImageDraw.Draw(image1)
 
+        cursor = [20, 70]
+
+        if statusbar:
+            set_statusbar_on_LCD2(draw, statusbar)
+            cursor[1] += statusbar_height + 2*padding_top_bottom
+
         logging.info("draw text")
         Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf",font_size)
         text_formatted = string_for_lcd(text_param)
-        draw.text((20, 70),text_formatted, font = Font1, fill = (0,0,0))
+        draw.text(cursor,text_formatted, font = Font1, fill = (0,0,0))
 
         image1=image1.rotate(0)
         disp.ShowImage(image1)
@@ -84,10 +96,20 @@ def print_rectangle_on_LCD2(x1, y1, x2, y2, color="WHITE", outline="BLUE"):
 
     logging.info("draw rectangle")
     draw.rectangle([(x1, y1), (x2, y2)], fill=color, outline=outline)
-    
+
     image1 = image1.rotate(0)
     disp.ShowImage(image1)
     print("print_rectangle_on_LCD2 worked")
+
+def set_statusbar_on_LCD2(img, percents=0, color="BLACK", border = 3)
+    bar_height = statusbar_height
+    img.rectangle([(padding_left_right, padding_top_bottom), (disp.width - padding_left_right, padding_top_bottom+bar_height)], fill=color)
+    img.rectangle([(padding_left_right+border, padding_top_bottom+border), (disp.width - padding_left_right-border, padding_top_bottom+bar_height-border)], fill="WHITE")
+    inner_padding = 2
+    w = int((disp.width - padding_left_right*2 - border*2 - inner_padding*2) * percents / 100)
+    img.rectangle([(padding_left_right+border+inner_padding,padding_top_bottom+border+inner_padding),(padding_left_right+border+inner_padding+w,padding_top_bottom+bar_height-border-inner_padding)], fill="GREEN")
+
+    
 
 
 def cleanup():
