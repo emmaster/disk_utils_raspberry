@@ -21,7 +21,6 @@ def string_for_lcd(text, width=14):
         line_open = True
         for word in words:
             if word == "<br>":
-                line += "\n"
                 line_open = False
             elif len(line) + len(word) + 1 <= width and line_open:
                 line += word + " "
