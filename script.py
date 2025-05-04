@@ -2,8 +2,10 @@ print("Hello to the script of disk copy utils for raspberry")
 # some comments
 
 import subprocess
+# old import
 # from my_LCD_utils import print_txt_on_LCD
 from my_LCD_utils2 import print_txt_on_LCD2
+from my_file_db_utils import put_status_in_db, get_status_from_db
 import sys
 import time
 from pathlib import Path
@@ -21,6 +23,60 @@ pi_nas_path_photos_chi = "/home/klsnkv/mounted_media/chinas/Photo library ALL/Ph
 ###### PATHES of SD CARD #####
 pi_sd_card_path = "/home/klsnkv/python_cron/mnt/sdcard"
 
+
+####### reading status from previous runs #########
+
+STATUS_DB_FILE = "/home/klsnkv/python_cron/status_db"
+
+# status_object = {
+#     "time": datetime.datetime.now(),
+#     "payload": "fucking amazing",
+
+#     "photos_subfolder_path": "/Volumes/Untitled/",
+#     "photos_finished": True,
+
+#     "videos_subfolder_path": "/Volumes/Untitled/",
+#     "videos_finished": False,
+
+#     'path': Path(db_file_path),
+#     "finished": True,
+# }
+
+status_obj = get_status_from_db(STATUS_DB_FILE)
+need_to_continue = False
+
+if status_obj == {}:
+    print("No status from previous run")
+    print_txt_on_LCD2("No status from previous run. Creating a new one.", color="YELLOW", spinner_sec=1)
+
+    status_obj = {
+        "time": datetime.datetime.now(),
+        "payload": "just created a new status object",
+        
+        "photos_finished": False,
+        "videos_finished": False,
+
+        "finished": False,
+    }
+    put_status_in_db(status_obj, STATUS_DB_FILE)
+    need_to_continue = False
+else:
+    from_previous_run_minutes = (datetime.datetime.now() - status_obj["time"]).total_seconds() // 60
+
+    if status_obj["finished"]:
+        print(f"Previous run was: {from_previous_run_minutes} minutes ago. And it was finished.")
+        print_txt_on_LCD2(f"Previous run was: {from_previous_run_minutes} minutes ago. And it was finished", color="GREEN", spinner_sec=1)
+        need_to_continue = False
+    else:
+        print(f"Previous run was: {from_previous_run_minutes} minutes ago. And it was finished.")
+        need_to_continue = True
+        print_txt_on_LCD2(f"Previous run was: {from_previous_run_minutes} minutes ago. And it was NOT finished. TRYING to continue", color="YELLOW",font_size=20, spinner_sec=1)
+
+#### WE HAVE A FLAG need_to_continue
+
+
+
+####### FUNCTIONS ########
 
 def get_unmounted_partitions():
     output = subprocess.check_output(['lsblk', '-o', 'NAME,MOUNTPOINT,TYPE', '-nr']).decode()
@@ -68,7 +124,8 @@ def copy_files_w_status(src_list, target_subfolder, label ="", max_retries = 3, 
                     time.sleep(sleep_between_retries)
                     continue
                 sys.exit()
-    
+
+##### MAIN SCRIPT #####
 
 if __name__ == "__main__":
     mount_point = "./mnt/sdcard"
@@ -172,20 +229,40 @@ if __name__ == "__main__":
                 print_txt_on_LCD2(f"[PHOTOS] Created folder {target_folder_name}", font_size = 25, color="GREEN", spinner_sec= 0.5)
 
             ## creating subfolders for JPG and ARW
-            for i in range(100):
-                if not (nas_photo_dir / target_folder_name / f"{i+1:03d}").is_dir():
-                    (nas_photo_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
-                    target_subfolder = (nas_photo_dir / target_folder_name / f"{i+1:03d}")
-                    print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
-                    print_txt_on_LCD2(f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
-                    break
-            
-            #copying jpg files:
+            if need_to_continue and not status_obj["photos_finished"]:
+                target_subfolder = Path(status_obj["photos_subfolder_path"])
+                print(f"[PHOTOS] Continuing from previous run. Using folder {target_subfolder}")
+                print_txt_on_LCD2(f"[PHOTOS] Continuing from previous run. Using folder {target_subfolder}", font_size = 20, color="YELLOW", spinner_sec= 0.5)
+            else:
+                for i in range(100):
+                    if not (nas_photo_dir / target_folder_name / f"{i+1:03d}").is_dir():
+                        (nas_photo_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
+                        target_subfolder = (nas_photo_dir / target_folder_name / f"{i+1:03d}")
+                        
+                        status_obj["photos_subfolder_path"] = target_subfolder
+                        status_obj["payload"] = "new photos subfolder created"
+                        put_status_in_db(status_obj, STATUS_DB_FILE)
 
+                        print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
+                        print_txt_on_LCD2(f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 20, color="GREEN", spinner_sec= 0.5)
+                        break
+            
+            status_obj["payload"] = "starting copying images"
+            put_status_in_db(status_obj, STATUS_DB_FILE)
+
+            #copying jpg files:
             copy_files_w_status(jpg_files, target_subfolder, label="[PHOTOS JPF]")
 
             #copying arw files:
             copy_files_w_status(arw_files, target_subfolder, label="[PHOTOS ARW]")
+
+            print_txt_on_LCD2(f"[PHOTOS] Copied {len(jpg_files) + len(arw_files)} files", font_size = 25, color="GREEN", spinner_sec= 0.5)
+            status_obj["payload"] = "finished copying images"
+            status_obj["photos_finished"] = True
+            put_status_in_db(status_obj, STATUS_DB_FILE)
+        elif len(jpg_files) == 0 and len(arw_files) == 0:
+            status_obj["photos_finished"] = True
+            put_status_in_db(status_obj, STATUS_DB_FILE)
                     
 
         
@@ -200,16 +277,45 @@ if __name__ == "__main__":
                 print_txt_on_LCD2(f"[VIDEOS] Created folder {target_folder_name}", font_size = 25, color="GREEN", spinner_sec= 0.5)
             
             ## creating subfolders for Videos
-            for i in range(100):
-                if not (nas_video_dir / target_folder_name / f"{i+1:03d}").is_dir():
-                    (nas_video_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
-                    target_subfolder = (nas_video_dir / target_folder_name / f"{i+1:03d}")
-                    print(f"Creating folder {target_folder_name}/{i+1:03d} for videos")
-                    print_txt_on_LCD2(f"[VIDEOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
-                    break
+            if need_to_continue and not status_obj["videos_finished"]:
+                target_subfolder = Path(status_obj["videos_subfolder_path"])
+                print(f"[VIDEOS] Continuing from previous run. Using folder {target_subfolder}")
+                print_txt_on_LCD2(f"[VIDEOS] Continuing from previous run. Using folder {target_subfolder}", font_size = 20, color="YELLOW", spinner_sec= 0.5)
+            else:
+                for i in range(100):
+                    if not (nas_video_dir / target_folder_name / f"{i+1:03d}").is_dir():
+                        (nas_video_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
+                        target_subfolder = (nas_video_dir / target_folder_name / f"{i+1:03d}")
+
+                        status_obj["videos_subfolder_path"] = target_subfolder
+                        status_obj["payload"] = "new videos subfolder created"
+                        put_status_in_db(status_obj, STATUS_DB_FILE)
+
+                        print(f"Creating folder {target_folder_name}/{i+1:03d} for videos")
+                        print_txt_on_LCD2(f"[VIDEOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+                        break
+            
+            status_obj["payload"] = "starting copying videos"
+            status_obj["videos_finished"] = False
+            put_status_in_db(status_obj, STATUS_DB_FILE)
 
             #copying mp4 files:
             copy_files_w_status(mp4_files, target_subfolder, label="[VIDEOS MP4]")
+
+            print_txt_on_LCD2(f"[VIDEOS] Copied {len(mp4_files)} files", font_size = 25, color="GREEN", spinner_sec= 0.5)
+            status_obj["payload"] = "finished copying videos"
+            status_obj["videos_finished"] = True
+            put_status_in_db(status_obj, STATUS_DB_FILE)
+        else:
+            status_obj["videos_finished"] = True
+            put_status_in_db(status_obj, STATUS_DB_FILE)
+        
+        status_obj["finished"] = True
+        status_obj["time"] = datetime.datetime.now()
+        status_obj["payload"] = "finished copying all files"
+        put_status_in_db(status_obj, STATUS_DB_FILE)
+
+
             
 
 
