@@ -34,6 +34,40 @@ def get_unmounted_partitions():
     
     return unmounted
 
+def copy_files_w_status(src_list, target_subfolder, label ="", max_retries = 3, sleep_between_retries = 1):
+    
+    copied = 0
+    to_copy = len(src_list)
+    
+    if len(src_list) == 0:
+        print(f"No files to copy for {label}")
+        print_txt_on_LCD2(f"{label} No files to copy", font_size = 25, color="YELLOW")
+        return
+    
+    for f in src_list:
+        
+        for attempt in range(1, max_retries + 1):
+            try:
+                new_full_path = target_subfolder / f.name
+                if new_full_path.exists() and new_full_path.stat().st_size == f.stat().st_size:
+                    continue
+                shutil.copy2(f, target_subfolder)
+                copied += 1
+                if copied % 10 == 1:
+                    completion = int((copied / to_copy) * 100)
+                    print(f"Copied {copied} files")
+                    print_txt_on_LCD2(f"{label} Copied {copied}/{to_copy} files", font_size = 25, color="GREEN", statusbar = completion)
+                break
+            except Exception as e:
+                print(f"[Attempt: {attempt}/{max_retries}]Error copying {f}: {e}")
+                print_txt_on_LCD2(f"[Attempt: {attempt}/{max_retries}] {label} Error copying {f}", font_size = 25, color="RED")
+                if attempt < max_retries:
+                    print(f"Retrying in {sleep_between_retries} seconds...")
+                    time.sleep(sleep_between_retries)
+                    continue
+                sys.exit()
+    
+
 if __name__ == "__main__":
     mount_point = "./mnt/sdcard"
     subprocess.run(['sudo', 'umount', mount_point])
@@ -145,41 +179,15 @@ if __name__ == "__main__":
                     break
             
             #copying jpg files:
-            copied = 0
-            to_copy = len(jpg_files)
 
-            for f in jpg_files:
-                try:
-                    shutil.copy2(f, target_subfolder)
-                    copied += 1
-                    if copied % 10 == 1:
-                        completion = int((copied / to_copy) * 100)
-                        print(f"Copied {copied} files")
-                        print_txt_on_LCD2(f"[PHOTOS JPG] Copied {copied}/{to_copy} files", font_size = 25, color="GREEN", statusbar = completion)
-                except Exception as e:
-                    print(f"Error copying {f}: {e}")
-                    print_txt_on_LCD2(f"[PHOTOS JPG] Error copying {f}", font_size = 25, color="RED")
-                    sys.exit()
+            copy_files_w_status(jpg_files, target_subfolder, label="[PHOTOS JPF]")
 
             #copying arw files:
-            copied = 0
-            to_copy = len(arw_files)
-            for f in arw_files:
-                try:
-                    shutil.copy2(f, target_subfolder)
-                    copied += 1
-                    if copied % 10 == 1:
-                        completion = int((copied / to_copy) * 100)
-                        print(f"Copied {copied} files")
-                        print_txt_on_LCD2(f"[PHOTOS ARW] Copied {copied}/{to_copy} files", font_size = 25, color="GREEN", statusbar = completion)
-                except Exception as e:
-                    print(f"Error copying {f}: {e}")
-                    print_txt_on_LCD2(f"[PHOTOS ARW] Error copying {f}", font_size = 25, color="RED")
-                    sys.exit()
+            copy_files_w_status(arw_files, target_subfolder, label="[PHOTOS ARW]")
                     
 
         
-        #### videos #####
+        #### VIDEOS #####
         if len(mp4_files) > 0:
             if (nas_video_dir / target_folder_name).is_dir():
                 print(f"Folder {target_folder_name} already exists")
@@ -199,26 +207,8 @@ if __name__ == "__main__":
                     break
 
             #copying mp4 files:
-            copied = 0
-            to_copy = len(mp4_files)
-            for f in mp4_files:
-                try:
-                    shutil.copy2(f, target_subfolder)
-                    copied += 1
-                    if copied % 10 == 1:
-                        completion = int((copied / to_copy) * 100)
-                        print(f"Copied {copied} files")
-                        print_txt_on_LCD2(f"[VIDEOS MP4] Copied {copied}/{to_copy} files", font_size = 25, color="GREEN", statusbar = completion)
-                except Exception as e:
-                    print(f"Error copying {f}: {e}")
-                    print_txt_on_LCD2(f"[VIDEOS MP4] Error copying {f}", font_size = 25, color="RED")
-                    sys.exit()
-                    
+            copy_files_w_status(mp4_files, target_subfolder, label="[VIDEOS MP4]")
             
-
-
-
-        
 
 
     except Exception as e:
