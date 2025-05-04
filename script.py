@@ -124,25 +124,48 @@ if __name__ == "__main__":
 
         #### photos #####
 
+        target_subfolder = None
+
         if len(jpg_files) > 0 or len(arw_files) > 0:
             if (nas_photo_dir / target_folder_name).is_dir():
                 print(f"Folder {target_folder_name} already exists")
                 print_txt_on_LCD2(f"[PHOTOS] Folder {target_folder_name} already exists", font_size = 25, color="YELLOW", spinner_sec= 0.5)
             else:
                 print(f"Creating folder {target_folder_name} for photos")
-                (nas_photo_dir / target_folder_name).mkdir(parents=True, exist_ok=False)
+                (nas_photo_dir / target_folder_name).mkdir(parents=False, exist_ok=False)
                 print_txt_on_LCD2(f"[PHOTOS] Created folder {target_folder_name}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+
+            ## creating subfolders for JPG and ARW
+            for i in range(100):
+                if not (nas_photo_dir / target_folder_name / f"{i+1:03d}").is_dir():
+                    (nas_photo_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
+                    target_subfolder = (nas_photo_dir / target_folder_name / f"{i+1:03d}")
+                    print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
+                    print_txt_on_LCD2(f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+                    break
+                    
 
         
         #### videos #####
         if len(mp4_files) > 0:
             if (nas_video_dir / target_folder_name).is_dir():
                 print(f"Folder {target_folder_name} already exists")
-                print_txt_on_LCD2(f"[VIDEOS] Folder {target_folder_name}", font_size = 25, color="YELLOW", spinner_sec= 0.5)
+                print_txt_on_LCD2(f"[VIDEOS] Folder {target_folder_name} already exists", font_size = 25, color="YELLOW", spinner_sec= 0.5)
             else:
                 print(f"Creating folder {target_folder_name} for videos")
-                (nas_video_dir / target_folder_name).mkdir(parents=True, exist_ok=False)
+                (nas_video_dir / target_folder_name).mkdir(parents=False, exist_ok=False)
                 print_txt_on_LCD2(f"[VIDEOS] Created folder {target_folder_name}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+            
+            ## creating subfolders for Videos
+            for i in range(100):
+                if not (nas_video_dir / target_folder_name / f"{i+1:03d}").is_dir():
+                    (nas_video_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
+                    target_subfolder = (nas_video_dir / target_folder_name / f"{i+1:03d}")
+                    print(f"Creating folder {target_folder_name}/{i+1:03d} for videos")
+                    print_txt_on_LCD2(f"[VIDEOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+                    break
+            
+
 
 
         
