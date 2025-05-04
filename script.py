@@ -143,6 +143,39 @@ if __name__ == "__main__":
                     print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
                     print_txt_on_LCD2(f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
                     break
+            
+            #copying jpg files:
+            copied = 0
+            to_copy = len(jpg_files)
+
+            for f in jpg_files:
+                try:
+                    shutil.copy2(f, target_subfolder)
+                    copied += 1
+                    if copied % 10 == 1:
+                        completion = int((copied / to_copy) * 100)
+                        print(f"Copied {copied} files")
+                        print_txt_on_LCD2(f"[PHOTOS JPG] Copied {copied}/{to_copy} files", font_size = 25, color="GREEN", statusbar = completion)
+                except Exception as e:
+                    print(f"Error copying {f}: {e}")
+                    print_txt_on_LCD2(f"[PHOTOS JPG] Error copying {f}", font_size = 25, color="RED")
+                    sys.exit()
+
+            #copying arw files:
+            copied = 0
+            to_copy = len(arw_files)
+            for f in arw_files:
+                try:
+                    shutil.copy2(f, target_subfolder)
+                    copied += 1
+                    if copied % 10 == 1:
+                        completion = int((copied / to_copy) * 100)
+                        print(f"Copied {copied} files")
+                        print_txt_on_LCD2(f"[PHOTOS ARW] Copied {copied}/{to_copy} files", font_size = 25, color="GREEN", statusbar = completion)
+                except Exception as e:
+                    print(f"Error copying {f}: {e}")
+                    print_txt_on_LCD2(f"[PHOTOS ARW] Error copying {f}", font_size = 25, color="RED")
+                    sys.exit()
                     
 
         
@@ -164,6 +197,23 @@ if __name__ == "__main__":
                     print(f"Creating folder {target_folder_name}/{i+1:03d} for videos")
                     print_txt_on_LCD2(f"[VIDEOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
                     break
+
+            #copying mp4 files:
+            copied = 0
+            to_copy = len(mp4_files)
+            for f in mp4_files:
+                try:
+                    shutil.copy2(f, target_subfolder)
+                    copied += 1
+                    if copied % 10 == 1:
+                        completion = int((copied / to_copy) * 100)
+                        print(f"Copied {copied} files")
+                        print_txt_on_LCD2(f"[VIDEOS MP4] Copied {copied}/{to_copy} files", font_size = 25, color="GREEN", statusbar = completion)
+                except Exception as e:
+                    print(f"Error copying {f}: {e}")
+                    print_txt_on_LCD2(f"[VIDEOS MP4] Error copying {f}", font_size = 25, color="RED")
+                    sys.exit()
+                    
             
 
 
