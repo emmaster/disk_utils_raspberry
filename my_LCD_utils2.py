@@ -91,12 +91,12 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None,
         image1=image1.rotate(0)
         disp.ShowImage(image1)
 
-        if spinner:
-            Font2 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf", 20)
-            spinner_txt = "|||||||||||"
-            draw.text([0, display.height - 20], spinner_txt, font = Font2, fill = (0,0,0))
-            image1=image1.rotate(0)
-            disp.ShowImage(image1)
+        # if spinner:
+        #     Font2 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf", 20)
+        #     spinner_txt = "|||||||||||"
+        #     draw.text([0, display.height - 20], spinner_txt, font = Font2, fill = (0,0,0))
+        #     image1=image1.rotate(0)
+        #     disp.ShowImage(image1)
 
             
         print("print_txt_on_LCD2 worked")
