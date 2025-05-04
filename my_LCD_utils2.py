@@ -27,8 +27,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 #statusbar params
-padding_left_right = 5
-padding_top_bottom = 10
+padding_left_right = 20
+padding_top_bottom = 20
 statusbar_height = 24
 
 disp = None
@@ -59,7 +59,7 @@ except KeyboardInterrupt:
 
 
 def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None):
-    
+        
         # Create blank image for drawing.
         if color == "WHITE":
                  image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
@@ -73,10 +73,10 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None)
                  image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
         draw = ImageDraw.Draw(image1)
 
-        cursor = [20, 70]
+        cursor = [padding_left_right, padding_top_bottom]
 
         if statusbar:
-            set_statusbar_on_LCD2(draw, statusbar)
+            set_statusbar_on_LCD2(draw, statusbar, inner_color=color)
             cursor[1] += statusbar_height + 2 * padding_top_bottom
 
         logging.info("draw text")
@@ -101,13 +101,13 @@ def print_rectangle_on_LCD2(x1, y1, x2, y2, color="WHITE", outline="BLUE"):
     disp.ShowImage(image1)
     print("print_rectangle_on_LCD2 worked")
 
-def set_statusbar_on_LCD2(img, percents=0, color="BLACK", border = 3):
+def set_statusbar_on_LCD2(img, percents=0, color="BLACK", inner_color="WHITE", border = 3):
     bar_height = statusbar_height
     img.rectangle([(padding_left_right, padding_top_bottom), (disp.width - padding_left_right, padding_top_bottom+bar_height)], fill=color)
-    img.rectangle([(padding_left_right+border, padding_top_bottom+border), (disp.width - padding_left_right-border, padding_top_bottom+bar_height-border)], fill="WHITE")
+    img.rectangle([(padding_left_right+border, padding_top_bottom+border), (disp.width - padding_left_right-border, padding_top_bottom+bar_height-border)], fill=inner_color)
     inner_padding = 2
     w = int((disp.width - padding_left_right*2 - border*2 - inner_padding*2) * percents / 100)
-    img.rectangle([(padding_left_right+border+inner_padding,padding_top_bottom+border+inner_padding),(padding_left_right+border+inner_padding+w,padding_top_bottom+bar_height-border-inner_padding)], fill="GREEN")
+    img.rectangle([(padding_left_right+border+inner_padding,padding_top_bottom+border+inner_padding),(padding_left_right+border+inner_padding+w,padding_top_bottom+bar_height-border-inner_padding)], fill=color)
 
     
 
