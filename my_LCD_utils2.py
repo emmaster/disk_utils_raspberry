@@ -58,7 +58,7 @@ except KeyboardInterrupt:
 
 
 
-def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None, spinner = None):
+def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None, spinner_sec = None, spinner_status = 20):
         
         # Create blank image for drawing.
         if color == "WHITE":
@@ -89,15 +89,22 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None,
         text_formatted = string_for_lcd(text_param, width=line_width)
         draw.text(cursor,text_formatted, font = Font1, fill = (0,0,0))
 
-        if spinner:
+        if spinner_sec:
             Font2 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf", 20)
-            spinner_txt = "////////////////"
-            draw.text((10, disp.height - 30), spinner_txt, font = Font2, fill = (0,0,0))
+            if spinner_status == 20:
+                spinner_txt = "/"*20
+            spinner_txt = "////////////////////"
+            draw.text((20, disp.height - 40), spinner_txt, font = Font2, fill = (0,0,0))
             # image1=image1.rotate(0)
             # disp.ShowImage(image1)
 
         image1=image1.rotate(0)
         disp.ShowImage(image1)
+
+        if spinner_sec:
+              time.sleep(spinner_sec/spinner_status)
+              if spinner_status > 1:
+                    print_txt_on_LCD2(text_param, font_size=font_size, color=color, statusbar=statusbar, spinner_sec=spinner_sec, spinner_status=spinner_status-1)
 
             
         print("print_txt_on_LCD2 worked")
