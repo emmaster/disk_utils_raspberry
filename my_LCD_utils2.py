@@ -101,7 +101,7 @@ def print_rectangle_on_LCD2(x1, y1, x2, y2, color="WHITE", outline="BLUE"):
     disp.ShowImage(image1)
     print("print_rectangle_on_LCD2 worked")
 
-def set_statusbar_on_LCD2(img, percents=0, color="BLACK", border = 3)
+def set_statusbar_on_LCD2(img, percents=0, color="BLACK", border = 3):
     bar_height = statusbar_height
     img.rectangle([(padding_left_right, padding_top_bottom), (disp.width - padding_left_right, padding_top_bottom+bar_height)], fill=color)
     img.rectangle([(padding_left_right+border, padding_top_bottom+border), (disp.width - padding_left_right-border, padding_top_bottom+bar_height-border)], fill="WHITE")
