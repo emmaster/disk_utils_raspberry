@@ -81,6 +81,7 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None)
 
         logging.info("draw text")
         Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf",font_size)
+        line_width = 14
         if font_size == 25:
             line_width = 15
         elif font_size <25 and font_size > 18:
