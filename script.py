@@ -3,6 +3,7 @@ print("Hello to the script of disk copy utils for raspberry")
 
 import subprocess
 from my_LCD_utils import print_txt_on_LCD
+import sys
 
 def get_unmounted_partitions():
     output = subprocess.check_output(['lsblk', '-o', 'NAME,MOUNTPOINT,TYPE', '-nr']).decode()
@@ -23,6 +24,7 @@ if __name__ == "__main__":
     if len(unmntd) == 0:
         print("No unmounted partitions found.")
         print_txt_on_LCD("No unmonted partitions found",color="RED")
+        sys.exit()
     else:
         print("Unmounted partitions:")
         print_txt_on_LCD(f"Found unmounted partitions: {len(unmntd)} !")
@@ -38,6 +40,8 @@ if __name__ == "__main__":
                 print_txt_on_LCD(f"Mounted {dev} to {mount_point}")
             except subprocess.CalledProcessError as e:
                 print(f"Error mounting {dev}: {e}")
+
+    print_txt_on_LCD("Reached end of script",color="GREEN")
         
 
     
