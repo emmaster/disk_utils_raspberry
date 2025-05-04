@@ -58,7 +58,7 @@ except KeyboardInterrupt:
 
 
 
-def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None, spinner = None):
+def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None):
         
         # Create blank image for drawing.
         if color == "WHITE":

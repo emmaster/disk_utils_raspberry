@@ -59,6 +59,8 @@ if __name__ == "__main__":
                 print(f"Error mounting {dev}: {e}")
     
 
+    print_txt_on_LCD2("lets do check")
+
     nas_video_dir = Path(pi_nas_path_videos_chi)
     nas_photo_dir = Path(pi_nas_path_photos_chi)
     sd_card_dir = Path(pi_sd_card_path)
@@ -103,7 +105,7 @@ if __name__ == "__main__":
 
     
 
-    # print_txt_on_LCD2("Reached end of <br> script",color="GREEN")
+    print_txt_on_LCD2("Reached end of <br> script",color="GREEN")
         
 
     
