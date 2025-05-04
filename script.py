@@ -54,8 +54,52 @@ if __name__ == "__main__":
                 subprocess.run(['sudo','mount', dev, mount_point], check=True)
                 print(f"Mounted {dev} to {mount_point}")
                 print_txt_on_LCD2(f"Mounted {dev} to {mount_point}")
+                time.sleep(1)
             except subprocess.CalledProcessError as e:
                 print(f"Error mounting {dev}: {e}")
+    
+
+    nas_video_dir = Path(pi_nas_path_videos_chi)
+    nas_photo_dir = Path(pi_nas_path_photos_chi)
+    sd_card_dir = Path(pi_sd_card_path)
+    
+    all_is_mounted = False
+    message = ""
+    
+    if nas_video_dir.is_dir() and any(nas_video_dir.iterdir()):
+        all_is_mounted = True
+        message += f"[CHECK] NAS video dir: is mounted <br> "
+    else:
+        all_is_mounted = False
+        message += f"[ERROR] NAS video dir: is NOT mounted <br> "
+    
+    if nas_photo_dir.is_dir() and any(nas_photo_dir.iterdir()) and all_is_mounted:
+        all_is_mounted = True
+        message += f"[CHECK] NAS photo dir: is mounted <br> "
+    else:
+        all_is_mounted = False
+        message += f"[ERROR] NAS photo dir: is NOT mounted <br> "
+
+    if sd_card_dir.is_dir() and any(sd_card_dir.iterdir()) and all_is_mounted:
+        all_is_mounted = True
+        message += f"[CHECK] SD card dir: is mounted <br> "
+    else:
+        all_is_mounted = False
+        message += f"[ERROR] SD card dir: is NOT mounted <br> "
+
+    if all_is_mounted:
+        print("All directories are mounted")
+        print_txt_on_LCD2(message,color="GREEN")
+        time.sleep(1)
+    else:
+        print("Not all directories are mounted")
+        print_txt_on_LCD2(message,color="RED")
+        time.sleep(1)
+        sys.exit()
+
+
+
+
 
     
 
