@@ -53,7 +53,7 @@ if __name__ == "__main__":
             try:
                 subprocess.run(['sudo','mount', dev, mount_point], check=True)
                 print(f"Mounted {dev} to {mount_point}")
-                print_txt_on_LCD2(f"Mounted {dev} to {mount_point}")
+                print_txt_on_LCD2(f"Mounted {dev} to {mount_point}", font_size=20, color="GREEN")
                 time.sleep(1)
             except subprocess.CalledProcessError as e:
                 print(f"Error mounting {dev}: {e}")
@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     if all_is_mounted:
         print("All directories are mounted")
-        print_txt_on_LCD2(message, font_size = 16, color="GREEN")
+        print_txt_on_LCD2(message, font_size = 16, color="GREEN", spinner=5)
         time.sleep(1)
     else:
         print("Not all directories are mounted")
