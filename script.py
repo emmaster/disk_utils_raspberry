@@ -5,6 +5,21 @@ import subprocess
 # from my_LCD_utils import print_txt_on_LCD
 from my_LCD_utils2 import print_txt_on_LCD2
 import sys
+import time
+from pathlib import Path
+import shutil
+
+#### PATHES of NAS #####
+##### CHICAGO #####
+pi_nas_path_chi = "/home/klsnkv/mounted_media/chinas"
+pi_nas_path_videos_chi = "/home/klsnkv/mounted_media/chinas/My videos"
+pi_nas_path_photos_chi = "/home/klsnkv/mounted_media/chinas/Photo library ALL/Photos a New Era"
+
+##### LISBON #####
+
+###### PATHES of SD CARD #####
+pi_sd_card_path = "/home/klsnkv/python_cron/mnt/sdcard"
+
 
 def get_unmounted_partitions():
     output = subprocess.check_output(['lsblk', '-o', 'NAME,MOUNTPOINT,TYPE', '-nr']).decode()
@@ -42,7 +57,9 @@ if __name__ == "__main__":
             except subprocess.CalledProcessError as e:
                 print(f"Error mounting {dev}: {e}")
 
-    print_txt_on_LCD2("Reached end of script",color="GREEN")
+    
+
+    print_txt_on_LCD2("Reached end of\nscript",color="GREEN")
         
 
     
