@@ -91,9 +91,9 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None,
 
         if spinner_sec:
             Font2 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf", 20)
-            if spinner_status == 20:
-                spinner_txt = "/"*20
-            spinner_txt = "////////////////////"
+            # if spinner_status == 20:
+            spinner_txt = "/"*spinner_status
+            # spinner_txt = "////////////////////"
             draw.text((20, disp.height - 40), spinner_txt, font = Font2, fill = (0,0,0))
             # image1=image1.rotate(0)
             # disp.ShowImage(image1)
