@@ -20,7 +20,7 @@ from pathlib import Path
 
 
 def put_status_in_db(status_obj, db_file_path):
-    db_file_path = Path("/Users/klsnkv/coding/python/status_db")
+    db_file_path = Path(db_file_path)
     with open(db_file_path, "w") as f:
         for key in status_obj:
             if type(status_obj[key]) == datetime.datetime:
