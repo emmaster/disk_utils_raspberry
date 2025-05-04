@@ -53,17 +53,18 @@ except KeyboardInterrupt:
 
 
 def print_txt_on_LCD2(text_param, font_size=25, color="WHITE"):
-
-
-    # Raspberry Pi pin configuration:
-
+    
         # Create blank image for drawing.
         if color == "WHITE":
                  image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
         elif color == "GREEN":
                  image1 = Image.new("RGB", (disp.width,disp.height ), "GREEN")
-        else:
+        elif color == "YELLOW":
+                 image1 = Image.new("RGB", (disp.width,disp.height ), "YELLOW")
+        elif color == "RED":
                  image1 = Image.new("RGB", (disp.width,disp.height ), "RED")
+        else:
+                 image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
         draw = ImageDraw.Draw(image1)
 
         logging.info("draw text")
@@ -74,6 +75,20 @@ def print_txt_on_LCD2(text_param, font_size=25, color="WHITE"):
         image1=image1.rotate(0)
         disp.ShowImage(image1)
         print("print_txt_on_LCD2 worked")
+
+
+def print_rectangle_on_LCD2(x1, y1, x2, y2, color="WHITE", outline="BLUE"):
+    # Create blank image for drawing.
+    image1 = Image.new("RGB", (disp.width, disp.height), color)
+    draw = ImageDraw.Draw(image1)
+
+    logging.info("draw rectangle")
+    draw.rectangle([(x1, y1), (x2, y2)], fill=color, outline=outline)
+    
+    image1 = image1.rotate(0)
+    disp.ShowImage(image1)
+    print("print_rectangle_on_LCD2 worked")
+
 
 def cleanup():
     print("[my_LCD_utils2] Cleaning up before exit")
