@@ -47,6 +47,8 @@ def copy_files_w_status(src_list, target_subfolder, label ="", max_retries = 3, 
     for f in src_list:
         
         for attempt in range(1, max_retries + 1):
+            with open("/home/klsnkv/python_cron/heartbeat.txt", "w") as hb:
+                hb.write(f"Last alive: {datetime.datetime.fromtimestamp(time.time()).strftime("%Y_%m_%d %H:%M:%S"))}")
             try:
                 new_full_path = target_subfolder / f.name
                 if new_full_path.exists() and new_full_path.stat().st_size == f.stat().st_size:
