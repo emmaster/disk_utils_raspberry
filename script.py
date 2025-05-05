@@ -303,7 +303,7 @@ if __name__ == "__main__":
             #copying mp4 files:
             copy_files_w_status(mp4_files, target_subfolder, label="[VIDEOS MP4]")
 
-            print_txt_on_LCD2(f"[VIDEOS] Copied {len(mp4_files)} files", font_size = 25, color="GREEN", spinner_sec= 0.5)
+            print_txt_on_LCD2(f"[VIDEOS] Successfuly Copied {len(mp4_files)} files", font_size = 25, color="GREEN", spinner_sec= 0.5)
             status_obj["payload"] = "finished copying videos"
             status_obj["videos_finished"] = True
             put_status_in_db(status_obj, STATUS_DB_FILE)
