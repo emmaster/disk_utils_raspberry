@@ -1,2 +1,4 @@
 mnt/
 status_db
+__pycache__/
+heartbeat.txt

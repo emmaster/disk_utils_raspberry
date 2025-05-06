@@ -4,11 +4,12 @@ import subprocess
 import time
 
 button = Button(2)
+button2 = Button(21)
 #GPIO number 2 was plugged
 
-button.wait_for_press()
-print("THE BUTTON WAS PRESSED")
-print_txt_on_LCD("THE BUTTON\nWAS PRESSED!")
+button2.wait_for_press()
+print("THE BUTTON (key1 P21) WAS PRESSED")
+## print_txt_on_LCD("THE BUTTON\nWAS PRESSED!")
 time.sleep(0.2)
 
-subprocess.run(["./launcher.sh"], check=True)
+# subprocess.run(["./launcher.sh"], check=True)
