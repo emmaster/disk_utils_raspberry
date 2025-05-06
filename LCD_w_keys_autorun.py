@@ -5,6 +5,7 @@ import sys
 import time
 import subprocess
 import atexit
+import random
 
 sys.path.append("/home/klsnkv/1.3inch_LCD_HAT_code/1.3inch_LCD_HAT_code/python")
 
@@ -46,8 +47,19 @@ disp.ShowImage(image1)
 run_cycle = True
 refresh_display = True
 
+cycle_count = 0
+
 try:
     while run_cycle:
+        cycle_count += 1
+        if cycle_count > 24:
+            cycle_count = 0
+            # Randomly change the background color
+            random_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+            if refresh_display:
+                image1 = Image.new("RGB", (disp.width, disp.height), random_color)
+                draw = ImageDraw.Draw(image1)
+                disp.ShowImage(image1)
         # with canvas(device) as draw:
         if disp.digital_read(disp.GPIO_KEY_UP_PIN ) == 0: # button is released
             draw.polygon([(20, 20), (30, 2), (40, 20)], outline=255, fill=0xff00)  #Up        
