@@ -3,27 +3,46 @@
 #import chardet
 
 ##### THIS IS A UTILS TO WORK WITHOUT DISCONNECTING THE DISPLAY AFTER EACH USE ######
+###### THIS IS A VERSION FOR LCD 1.3 with BUTTONS #######
 
 import os
 import sys 
 import time
 import logging
 import atexit
-from my_LCD_utils import string_for_lcd
 
-sys.path.append("/home/klsnkv/LCD_1.5_Code/RaspberryPi/python")
+def string_for_lcd(text, width=14):
+    words = text.split()
+    if len(text) < width and not "<br>" in text:
+        return text
+    elif len(words[0]) > width:
+        return words[0][:width]+"-" + "\n" + string_for_lcd(text[width:], width)
+    else:
+        line = ""
+        rest = ""
+        line_open = True
+        for word in words:
+            if word == "<br>":
+                line_open = False
+            elif len(line) + len(word) + 1 <= width and line_open:
+                line += word + " "
+            else:
+                line_open = False
+                rest += word + " "
+        return line + "\n" + string_for_lcd(rest, width)
+
+sys.path.append("/home/klsnkv/1.3inch_LCD_HAT_code/1.3inch_LCD_HAT_code/python")
 
 
-import spidev as SPI
-from lib import LCD_1inch5
+# import spidev as SPI
 from PIL import Image,ImageDraw,ImageFont
 
-RST = 27
-DC = 25
-BL = 18
-bus = 0 
-device = 0 
-logging.basicConfig(level=logging.DEBUG)
+# RST = 27
+# DC = 25
+# BL = 18
+# bus = 0 
+# device = 0 
+# logging.basicConfig(level=logging.DEBUG)
 
 
 #statusbar params
@@ -31,34 +50,34 @@ padding_left_right = 20
 padding_top_bottom = 30
 statusbar_height = 24
 
-disp = None
+# disp = None
 
-try:
-    # Create a new SPI object each time
-    spi = SPI.SpiDev()
-    spi.open(bus, device)
-    spi.max_speed_hz = 10000000
+# try:
+#     # Create a new SPI object each time
+#     spi = SPI.SpiDev()
+#     spi.open(bus, device)
+#     spi.max_speed_hz = 10000000
     
-    # display with hardware SPI:
-    ''' Warning!!!Don't  creation of multiple displayer objects!!! '''
-    # disp = LCD_1inch5.LCD_1inch5(spi=SPI.SpiDev(bus, device),spi_freq=10000000,rst=RST,dc=DC,bl=BL)
-    disp = LCD_1inch5.LCD_1inch5(spi=spi,spi_freq=10000000,rst=RST,dc=DC,bl=BL)
-    # disp = LCD_1inch5.LCD_1inch5()
-    # Initialize library.
-    disp.Init()
-    # Clear display.
-    time.sleep(0.1)
-    disp.clear()
-except IOError as e:
-    logging.info(e)    
-except KeyboardInterrupt:
-    disp.module_exit()
-    logging.info("quit:")
-    exit()
+#     # display with hardware SPI:
+#     ''' Warning!!!Don't  creation of multiple displayer objects!!! '''
+#     # disp = LCD_1inch5.LCD_1inch5(spi=SPI.SpiDev(bus, device),spi_freq=10000000,rst=RST,dc=DC,bl=BL)
+#     disp = LCD_1inch5.LCD_1inch5(spi=spi,spi_freq=10000000,rst=RST,dc=DC,bl=BL)
+#     # disp = LCD_1inch5.LCD_1inch5()
+#     # Initialize library.
+#     disp.Init()
+#     # Clear display.
+#     time.sleep(0.1)
+#     disp.clear()
+# except IOError as e:
+#     logging.info(e)    
+# except KeyboardInterrupt:
+#     disp.module_exit()
+#     logging.info("quit:")
+#     exit()
 
 
 
-def print_txt_on_LCD2(text_param, font_size=25, color="WHITE", statusbar = None, spinner_sec = None, spinner_status = 5):
+def print_txt_on_LCD3(disp, text_param, font_size=25, color="WHITE", statusbar = None, spinner_sec = None, spinner_status = 5):
         
         # Create blank image for drawing.
         if color == "WHITE":
