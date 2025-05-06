@@ -152,12 +152,12 @@ def set_statusbar_on_LCD2(img, percents=0, color="BLACK", inner_color="WHITE", b
     
 
 
-def cleanup():
-    print("[my_LCD_utils2] Cleaning up before exit")
-    if disp:
-        disp.module_exit()
+# def cleanup():
+#     print("[my_LCD_utils2] Cleaning up before exit")
+#     if disp:
+#         disp.module_exit()
 
-atexit.register(cleanup)
+# atexit.register(cleanup)
     
 
 
