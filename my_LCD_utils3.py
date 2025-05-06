@@ -123,13 +123,13 @@ def print_txt_on_LCD3(disp, text_param, font_size=25, color="WHITE", statusbar =
         if spinner_sec:
               time.sleep(spinner_sec/5)
               if spinner_status >= 1:
-                    print_txt_on_LCD2(text_param, font_size=font_size, color=color, statusbar=statusbar, spinner_sec=spinner_sec, spinner_status=spinner_status-1)
+                    print_txt_on_LCD3(disp, text_param, font_size=font_size, color=color, statusbar=statusbar, spinner_sec=spinner_sec, spinner_status=spinner_status-1)
 
             
         print("print_txt_on_LCD2 worked")
 
 
-def print_rectangle_on_LCD2(x1, y1, x2, y2, color="WHITE", outline="BLUE"):
+def print_rectangle_on_LCD3(disp, x1, y1, x2, y2, color="WHITE", outline="BLUE"):
     # Create blank image for drawing.
     image1 = Image.new("RGB", (disp.width, disp.height), color)
     draw = ImageDraw.Draw(image1)
@@ -141,7 +141,7 @@ def print_rectangle_on_LCD2(x1, y1, x2, y2, color="WHITE", outline="BLUE"):
     disp.ShowImage(image1)
     print("print_rectangle_on_LCD2 worked")
 
-def set_statusbar_on_LCD2(img, percents=0, color="BLACK", inner_color="WHITE", border = 3):
+def set_statusbar_on_LCD3(disp, img, percents=0, color="BLACK", inner_color="WHITE", border = 3):
     bar_height = statusbar_height
     img.rectangle([(padding_left_right, padding_top_bottom), (disp.width - padding_left_right, padding_top_bottom+bar_height)], fill=color)
     img.rectangle([(padding_left_right+border, padding_top_bottom+border), (disp.width - padding_left_right-border, padding_top_bottom+bar_height-border)], fill=inner_color)
