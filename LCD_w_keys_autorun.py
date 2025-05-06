@@ -21,7 +21,7 @@ disp.clear()
 #Set the backlight to 100
 disp.bl_DutyCycle(50)
 
-Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf",font_size)
+Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf", 24)
 
 
 image = Image.open('./assets/img_for_display.jpg')
