@@ -44,6 +44,7 @@ draw.rectangle((0,0,disp.width, disp.height), outline=0, fill=0)
 disp.ShowImage(image1)
 
 run_cycle = True
+refresh_display = True
 
 try:
     while run_cycle:
@@ -81,11 +82,13 @@ try:
         if disp.digital_read(disp.GPIO_KEY1_PIN) == 0: # button is released
             draw.ellipse((70,0,90,20), outline=255, fill=0xff00) #A button        
         else: # button is pressed:
+            refresh_display = True
             draw.ellipse((70,0,90,20), outline=255, fill=0) #A button filled
             print ("KEY1")
             print_txt_on_LCD3(disp, "KEY1: launching copying", font_size=20, color="WHITE", statusbar=False, spinner_sec=1)
             try:
                 script3.copying_files(disp)
+                refresh_display = False
             except Exception as e:
                 print_txt_on_LCD3(disp, "Error during copying", font_size=20, color="RED")
                 print("Error during copying function: ", e)
@@ -94,6 +97,7 @@ try:
         if disp.digital_read(disp.GPIO_KEY2_PIN) == 0: # button is released
             draw.ellipse((100,20,120,40), outline=255, fill=0xff00) #B button]        
         else: # button is pressed:
+            refresh_display = True
             draw.ellipse((100,20,120,40), outline=255, fill=0) #B button filled
             print_txt_on_LCD3(disp, "KEY2 pressed", font_size=20, color="WHITE", statusbar=False, spinner_sec=2)
             print ("KEY2")
@@ -101,6 +105,7 @@ try:
         if disp.digital_read(disp.GPIO_KEY3_PIN) == 0: # button is released
             draw.ellipse((70,40,90,60), outline=255, fill=0xff00) #A button        
         else: # button is pressed:
+            refresh_display = True
             draw.ellipse((70,40,90,60), outline=255, fill=0) #A button filled
             draw.text([15, 90], 'KEY3 pressed = Exit', font=Font1, fill = (200,200,200))
 
@@ -108,7 +113,9 @@ try:
             print ("Exit")
             run_cycle = False
         
-        disp.ShowImage(image1)
+        if refresh_display:
+            disp.ShowImage(image1)
+        
         if run_cycle == False:
             time.sleep(1)
 except:

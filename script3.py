@@ -127,7 +127,7 @@ def copying_files(disp):
                         print(f"Retrying in {sleep_between_retries} seconds...")
                         time.sleep(sleep_between_retries)
                         continue
-                    sys.exit()
+                    return False
 
 ##### MAIN SCRIPT #####
 
@@ -138,7 +138,7 @@ def copying_files(disp):
     if len(unmntd) == 0:
         print("No unmounted partitions found.")
         print_txt_on_LCD3(disp, "No unmonted partitions found",color="RED")
-        sys.exit()
+        return False
     else:
         print("Unmounted partitions:")
         print_txt_on_LCD3(disp, f"Found unmounted partitions: {len(unmntd)} !")
@@ -195,7 +195,7 @@ def copying_files(disp):
         print("Not all directories are mounted")
         print_txt_on_LCD3(disp, message, font_size = 16, color="RED")
         time.sleep(1)
-        sys.exit()
+        return False
 
     try:
         jpg_files = list(sd_card_dir.rglob('*.JPG'))
@@ -215,7 +215,7 @@ def copying_files(disp):
         if len(jpg_files) == 0 and len(arw_files) == 0 and len(mp4_files) == 0:
             print("No files to transfer")
             print_txt_on_LCD3(disp, "No files found", font_size = 25, color="YELLOW")
-            sys.exit()
+            return False
         
         
 
@@ -326,7 +326,7 @@ def copying_files(disp):
     except Exception as e:
         print(f"Error: {e}")
         print_txt_on_LCD3(disp, "Error: with finding video/audio files", font_size = 25, color="RED")
-        sys.exit()
+        return False
 
     
 
