@@ -9,6 +9,7 @@ import atexit
 sys.path.append("/home/klsnkv/1.3inch_LCD_HAT_code/1.3inch_LCD_HAT_code/python")
 
 from my_LCD_utils3 import print_txt_on_LCD3
+import script3
 
 import ST7789
 from PIL import Image,ImageDraw,ImageFont
@@ -82,6 +83,8 @@ try:
         else: # button is pressed:
             draw.ellipse((70,0,90,20), outline=255, fill=0) #A button filled
             print ("KEY1")
+            print_txt_on_LCD3(disp, "KEY1: launching copying", font_size=20, color="WHITE", statusbar=False, spinner_sec=1)
+            script3.copying_files()
             
         if disp.digital_read(disp.GPIO_KEY2_PIN) == 0: # button is released
             draw.ellipse((100,20,120,40), outline=255, fill=0xff00) #B button]        
