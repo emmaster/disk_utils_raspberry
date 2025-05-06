@@ -85,7 +85,7 @@ try:
             print ("KEY1")
             print_txt_on_LCD3(disp, "KEY1: launching copying", font_size=20, color="WHITE", statusbar=False, spinner_sec=1)
             try:
-                script3.copying_files()
+                script3.copying_files(disp)
             except Exception as e:
                 print_txt_on_LCD3(disp, "Error during copying", font_size=20, color="RED")
                 print("Error during copying function: ", e)
