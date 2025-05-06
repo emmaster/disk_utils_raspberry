@@ -8,6 +8,8 @@ import atexit
 
 sys.path.append("/home/klsnkv/1.3inch_LCD_HAT_code/1.3inch_LCD_HAT_code/python")
 
+from my_LCD_utils3 import print_txt_on_LCD3
+
 import ST7789
 from PIL import Image,ImageDraw,ImageFont
 
@@ -21,7 +23,7 @@ disp.clear()
 #Set the backlight to 100
 disp.bl_DutyCycle(50)
 
-Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf", 24)
+Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf", 22)
 
 
 image = Image.open('./assets/greeting_image.jpg')
@@ -85,13 +87,14 @@ try:
             draw.ellipse((100,20,120,40), outline=255, fill=0xff00) #B button]        
         else: # button is pressed:
             draw.ellipse((100,20,120,40), outline=255, fill=0) #B button filled
+            print_txt_on_LCD3(disp, "KEY2 pressed", font_size=20, color="WHITE", statusbar=False, spinner_sec=2)
             print ("KEY2")
             
         if disp.digital_read(disp.GPIO_KEY3_PIN) == 0: # button is released
             draw.ellipse((70,40,90,60), outline=255, fill=0xff00) #A button        
         else: # button is pressed:
             draw.ellipse((70,40,90,60), outline=255, fill=0) #A button filled
-            draw.text([20, 70], 'KEY3 pressed = Exit', font=Font1, fill = (200,200,200))
+            draw.text([15, 90], 'KEY3 pressed = Exit', font=Font1, fill = (200,200,200))
 
             print ("KEY3")
             print ("Exit")
