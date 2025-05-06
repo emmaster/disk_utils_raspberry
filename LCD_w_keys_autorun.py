@@ -24,7 +24,7 @@ disp.bl_DutyCycle(50)
 Font1 = ImageFont.truetype("./Font/SuisseIntl-Medium-WebM.ttf", 24)
 
 
-image = Image.open('./assets/img_for_display.jpg')
+image = Image.open('./assets/greeting_image.jpg')
 image = image.rotate(0)
 disp.ShowImage(image)
 time.sleep(3)
