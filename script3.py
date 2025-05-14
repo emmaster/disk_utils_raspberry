@@ -383,7 +383,7 @@ def copying_files(disp):
 
     except Exception as e:
         print(f"Error: {e}")
-        print_txt_on_LCD3(disp, "Error: with finding video/audio files", font_size = 25, color="RED")
+        print_txt_on_LCD3(disp, f"Error: with finding video/audio files {e}", font_size = 22, color="RED")
         return False
 
     
