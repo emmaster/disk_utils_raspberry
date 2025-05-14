@@ -303,12 +303,12 @@ def copying_files(disp):
             put_status_in_db(status_obj, STATUS_DB_FILE)
 
             #copying jpg files:
-            copy_files_w_status(jpg_files, target_subfolder, label="[PHOTOS JPF]")
+            copy_files_w_status(jpg_files, target_subfolder, label="[PHOTOS JPG]")
 
             #copying arw files:
             copy_files_w_status(arw_files, target_subfolder, label="[PHOTOS ARW]")
 
-            print_txt_on_LCD3(disp, f"[PHOTOS] Copied {len(jpg_files) + len(arw_files)} files", font_size = 25, color="GREEN", spinner_sec= 0.5)
+            print_txt_on_LCD3(disp, f"[PHOTOS] Successfuly Copied {len(jpg_files) + len(arw_files)} files", font_size = 25, color="GREEN", spinner_sec= 0.5)
             status_obj["payload"] = "finished copying images"
             status_obj["photos_finished"] = True
             put_status_in_db(status_obj, STATUS_DB_FILE)
