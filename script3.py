@@ -112,22 +112,62 @@ def copying_files(disp):
                     new_full_path = target_subfolder / f.name
                     if new_full_path.exists() and new_full_path.stat().st_size == f.stat().st_size:
                         copied += 1
+                        if copied % 5 == 0:
+                            completion = int((copied / to_copy) * 100)
+                            print(f"Copied {copied} files")
+                            print_txt_on_LCD3(disp, f"{label} Copied {copied}/{to_copy} files", font_size = 22, color="GREEN", statusbar = completion)
                         continue
                     shutil.copy2(f, target_subfolder)
                     copied += 1
-                    if copied % 10 == 1:
+                    if copied % 10 == 1 or f.stat().st_size / (1024*1024) > 50:
                         completion = int((copied / to_copy) * 100)
                         print(f"Copied {copied} files")
-                        print_txt_on_LCD3(disp, f"{label} Copied {copied}/{to_copy} files", font_size = 25, color="GREEN", statusbar = completion)
+                        print_txt_on_LCD3(disp, f"{label} Copied {copied}/{to_copy} files", font_size = 22, color="GREEN", statusbar = completion)
                     break
                 except Exception as e:
                     print(f"[Attempt: {attempt}/{max_retries}]Error copying {f}: {e}")
-                    print_txt_on_LCD3(disp, f"[Attempt: {attempt}/{max_retries}] {label} Error copying {f}", font_size = 25, color="RED")
+                    print_txt_on_LCD3(disp, f"[Attempt: {attempt}/{max_retries}] {label} Error copying {f}", font_size = 22, color="RED")
                     if attempt < max_retries:
                         print(f"Retrying in {sleep_between_retries} seconds...")
                         time.sleep(sleep_between_retries)
                         continue
                     return False
+                
+    def create_subfolder(parent_folder_path):
+        if not parent_folder_path.is_dir():
+            msg = f"Parent folder {parent_folder_path} does not exist"
+            print(msg)
+            print_txt_on_LCD3(disp, msg, font_size = 20, color="RED")
+            raise Exception(msg)
+        
+        subfolders = [f for f in parent_folder_path.iterdir() if f.is_dir()]
+
+        for i in range(100):
+            already_exists = False
+            for subfolder in subfolders:
+                if subfolder.name.startswith(f"{i+1:03d}"):
+                    print(f"Subfolder {subfolder.name} already exists")
+                    print_txt_on_LCD3(disp, f"Subfolder {subfolder.name} already exists", font_size = 20, color="YELLOW")
+                    already_exists = True
+                    break
+            if not (parent_folder_path / f"{i+1:03d}").is_dir() and not already_exists:
+                (parent_folder_path / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
+                return (parent_folder_path / f"{i+1:03d}")
+        return None
+    
+        # for i in range(100):
+        #     if not (nas_photo_dir / target_folder_name / f"{i+1:03d}").is_dir():
+        #         (nas_photo_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
+        #         target_subfolder = (nas_photo_dir / target_folder_name / f"{i+1:03d}")
+                
+        #         status_obj["photos_subfolder_path"] = target_subfolder
+        #         status_obj["payload"] = "new photos subfolder created"
+        #         put_status_in_db(status_obj, STATUS_DB_FILE)
+
+        #         print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
+        #         print_txt_on_LCD3(disp, f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 20, color="GREEN", spinner_sec= 0.5)
+        #         break
+
 
 ##### MAIN SCRIPT #####
 
@@ -226,11 +266,11 @@ def copying_files(disp):
         if len(jpg_files) > 0 or len(arw_files) > 0:
             if (nas_photo_dir / target_folder_name).is_dir():
                 print(f"Folder {target_folder_name} already exists")
-                print_txt_on_LCD3(disp, f"[PHOTOS] Folder {target_folder_name} already exists", font_size = 25, color="YELLOW", spinner_sec= 0.5)
+                print_txt_on_LCD3(disp, f"[PHOTOS] Folder {target_folder_name} already exists", font_size = 22, color="YELLOW", spinner_sec= 0.5)
             else:
                 print(f"Creating folder {target_folder_name} for photos")
                 (nas_photo_dir / target_folder_name).mkdir(parents=False, exist_ok=False)
-                print_txt_on_LCD3(disp, f"[PHOTOS] Created folder {target_folder_name}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+                print_txt_on_LCD3(disp, f"[PHOTOS] Created folder {target_folder_name}", font_size = 22, color="GREEN", spinner_sec= 0.5)
 
             ## creating subfolders for JPG and ARW
             if need_to_continue and not status_obj["photos_finished"]:
@@ -238,18 +278,26 @@ def copying_files(disp):
                 print(f"[PHOTOS] Continuing from previous run. Using folder {target_subfolder}")
                 print_txt_on_LCD3(disp, f"[PHOTOS] Continuing from previous run. Using folder {target_subfolder}", font_size = 20, color="YELLOW", spinner_sec= 0.5)
             else:
-                for i in range(100):
-                    if not (nas_photo_dir / target_folder_name / f"{i+1:03d}").is_dir():
-                        (nas_photo_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
-                        target_subfolder = (nas_photo_dir / target_folder_name / f"{i+1:03d}")
-                        
-                        status_obj["photos_subfolder_path"] = target_subfolder
-                        status_obj["payload"] = "new photos subfolder created"
-                        put_status_in_db(status_obj, STATUS_DB_FILE)
+                target_subfolder = create_subfolder(nas_photo_dir / target_folder_name)
+                status_obj["photos_subfolder_path"] = target_subfolder
+                status_obj["payload"] = "new photos subfolder created"
+                put_status_in_db(status_obj, STATUS_DB_FILE)
 
-                        print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
-                        print_txt_on_LCD3(disp, f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 20, color="GREEN", spinner_sec= 0.5)
-                        break
+                print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
+                print_txt_on_LCD3(disp, f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 20, color="GREEN", spinner_sec= 0.5)
+                
+                # for i in range(100):
+                #     if not (nas_photo_dir / target_folder_name / f"{i+1:03d}").is_dir():
+                #         (nas_photo_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
+                #         target_subfolder = (nas_photo_dir / target_folder_name / f"{i+1:03d}")
+                        
+                #         status_obj["photos_subfolder_path"] = target_subfolder
+                #         status_obj["payload"] = "new photos subfolder created"
+                #         put_status_in_db(status_obj, STATUS_DB_FILE)
+
+                #         print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
+                #         print_txt_on_LCD3(disp, f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 20, color="GREEN", spinner_sec= 0.5)
+                #         break
             
             status_obj["payload"] = "starting copying images"
             put_status_in_db(status_obj, STATUS_DB_FILE)
@@ -286,18 +334,28 @@ def copying_files(disp):
                 print(f"[VIDEOS] Continuing from previous run. Using folder {target_subfolder}")
                 print_txt_on_LCD3(disp, f"[VIDEOS] Continuing from previous run. Using folder {target_subfolder}", font_size = 20, color="YELLOW", spinner_sec= 0.5)
             else:
-                for i in range(100):
-                    if not (nas_video_dir / target_folder_name / f"{i+1:03d}").is_dir():
-                        (nas_video_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
-                        target_subfolder = (nas_video_dir / target_folder_name / f"{i+1:03d}")
+                target_subfolder = create_subfolder(nas_video_dir / target_folder_name)
+                target_subfolder = (nas_video_dir / target_folder_name / f"{i+1:03d}")
 
-                        status_obj["videos_subfolder_path"] = target_subfolder
-                        status_obj["payload"] = "new videos subfolder created"
-                        put_status_in_db(status_obj, STATUS_DB_FILE)
+                status_obj["videos_subfolder_path"] = target_subfolder
+                status_obj["payload"] = "new videos subfolder created"
+                put_status_in_db(status_obj, STATUS_DB_FILE)
 
-                        print(f"Creating folder {target_folder_name}/{i+1:03d} for videos")
-                        print_txt_on_LCD3(disp, f"[VIDEOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
-                        break
+                print(f"Creating folder {target_folder_name}/{i+1:03d} for videos")
+                print_txt_on_LCD3(disp, f"[VIDEOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+
+                # for i in range(100):
+                #     if not (nas_video_dir / target_folder_name / f"{i+1:03d}").is_dir():
+                #         (nas_video_dir / target_folder_name / f"{i+1:03d}").mkdir(parents=False, exist_ok=False)
+                #         target_subfolder = (nas_video_dir / target_folder_name / f"{i+1:03d}")
+
+                #         status_obj["videos_subfolder_path"] = target_subfolder
+                #         status_obj["payload"] = "new videos subfolder created"
+                #         put_status_in_db(status_obj, STATUS_DB_FILE)
+
+                #         print(f"Creating folder {target_folder_name}/{i+1:03d} for videos")
+                #         print_txt_on_LCD3(disp, f"[VIDEOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+                #         break
             
             status_obj["payload"] = "starting copying videos"
             status_obj["videos_finished"] = False
