@@ -70,8 +70,11 @@ def copying_files(disp):
             print(f"Previous run was: {from_previous_run_minutes} minutes ago. And it was finished.")
             print_txt_on_LCD3(disp, f"Previous run was: {from_previous_run_minutes} minutes ago. And it was finished", color="GREEN", spinner_sec=1)
             need_to_continue = False
+            status_obj["finished"] = False
+            status_obj["payload"] = "starting a new run of the script"
+            put_status_in_db(status_obj, STATUS_DB_FILE)
         else:
-            print(f"Previous run was: {from_previous_run_minutes} minutes ago. And it was finished.")
+            print(f"Previous run was: {from_previous_run_minutes} minutes ago. And it was NOT finished.")
             need_to_continue = True
             print_txt_on_LCD3(disp, f"Previous run was: {from_previous_run_minutes} minutes ago. And it was NOT finished. TRYING to continue", color="YELLOW",font_size=20, spinner_sec=1)
 
