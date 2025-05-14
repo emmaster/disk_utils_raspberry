@@ -116,7 +116,7 @@ def copying_files(disp):
                             completion = int((copied / to_copy) * 100)
                             print(f"Copied {copied} files")
                             print_txt_on_LCD3(disp, f"{label} Copied {copied}/{to_copy} files", font_size = 22, color="GREEN", statusbar = completion)
-                        continue
+                        break
                     shutil.copy2(f, target_subfolder)
                     copied += 1
                     if copied % 10 == 1 or f.stat().st_size / (1024*1024) > 50:
@@ -131,7 +131,7 @@ def copying_files(disp):
                         print(f"Retrying in {sleep_between_retries} seconds...")
                         time.sleep(sleep_between_retries)
                         continue
-                    raise Exception(f"Failed to copy {f} after {attempt} attempt")
+                    raise Exception(f"Failed to copy {f.name} after {attempt} attempt. {e}")
                     return False
                 
     def create_subfolder(parent_folder_path):
@@ -384,7 +384,7 @@ def copying_files(disp):
 
     except Exception as e:
         print(f"Error: {e}")
-        print_txt_on_LCD3(disp, f"Error: with finding video/audio files {e}", font_size = 22, color="RED")
+        print_txt_on_LCD3(disp, f"Error/Exception: {e}", font_size = 22, color="RED")
         return False
 
     
