@@ -250,7 +250,7 @@ def copying_files(disp):
         target_folder_name = now.strftime("%Y_%b") + "_byscript"
 
         msg = f"Found <br> {len(jpg_files)+len(arw_files)} images, <br> {len(mp4_files)} videos (MP4) <br> on SD card. <br> target folder: {target_folder_name}"
-        print_txt_on_LCD3(disp, msg, font_size = 25, color="GREEN", spinner_sec = 1)
+        print_txt_on_LCD3(disp, msg, font_size = 22, color="GREEN", spinner_sec = 1)
 
         if len(jpg_files) == 0 and len(arw_files) == 0 and len(mp4_files) == 0:
             print("No files to transfer")
@@ -283,8 +283,8 @@ def copying_files(disp):
                 status_obj["payload"] = "new photos subfolder created"
                 put_status_in_db(status_obj, STATUS_DB_FILE)
 
-                print(f"Creating folder {target_folder_name}/{i+1:03d} for photos")
-                print_txt_on_LCD3(disp, f"[PHOTOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 20, color="GREEN", spinner_sec= 0.5)
+                print(f"Creating folder {target_subfolder} for photos")
+                print_txt_on_LCD3(disp, f"[PHOTOS] Created folder {target_subfolder}", font_size = 20, color="GREEN", spinner_sec= 0.5)
                 
                 # for i in range(100):
                 #     if not (nas_photo_dir / target_folder_name / f"{i+1:03d}").is_dir():
@@ -335,14 +335,14 @@ def copying_files(disp):
                 print_txt_on_LCD3(disp, f"[VIDEOS] Continuing from previous run. Using folder {target_subfolder}", font_size = 20, color="YELLOW", spinner_sec= 0.5)
             else:
                 target_subfolder = create_subfolder(nas_video_dir / target_folder_name)
-                target_subfolder = (nas_video_dir / target_folder_name / f"{i+1:03d}")
+                # target_subfolder = (nas_video_dir / target_folder_name / f"{i+1:03d}")
 
                 status_obj["videos_subfolder_path"] = target_subfolder
                 status_obj["payload"] = "new videos subfolder created"
                 put_status_in_db(status_obj, STATUS_DB_FILE)
 
-                print(f"Creating folder {target_folder_name}/{i+1:03d} for videos")
-                print_txt_on_LCD3(disp, f"[VIDEOS] Created folder {target_folder_name}/{i+1:03d}", font_size = 25, color="GREEN", spinner_sec= 0.5)
+                print(f"Creating folder {target_subfolder} for videos")
+                print_txt_on_LCD3(disp, f"[VIDEOS] Created folder {target_subfolder}", font_size = 22, color="GREEN", spinner_sec= 0.5)
 
                 # for i in range(100):
                 #     if not (nas_video_dir / target_folder_name / f"{i+1:03d}").is_dir():
