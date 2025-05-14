@@ -131,6 +131,7 @@ def copying_files(disp):
                         print(f"Retrying in {sleep_between_retries} seconds...")
                         time.sleep(sleep_between_retries)
                         continue
+                    raise Exception(f"Failed to copy {f} after {attempt} attempt")
                     return False
                 
     def create_subfolder(parent_folder_path):
