@@ -26,22 +26,7 @@ def copying_files(disp):
     pi_nas_path_videos_portugal = "/home/klsnkv/mounted_media/portugal_nas/My videos"
     pi_nas_path_photos_portugal = "/home/klsnkv/mounted_media/portugal_nas/Photo library ALL/Photos a New Era"
 
-    if is_folder_not_empty(pi_nas_path_chi):
-        print("Using NAS path in Chicago")
-        print_txt_on_LCD3(disp, "Using NAS path in Chicago", color="GREEN", spinner_sec=1)
-        pi_nas_path = pi_nas_path_chi
-        pi_nas_path_videos = pi_nas_path_videos_chi
-        pi_nas_path_photos = pi_nas_path_photos_chi
-    elif is_folder_not_empty(pi_nas_path_portugal):
-        print("Using NAS path in Portugal")
-        print_txt_on_LCD3(disp, "Using NAS path in Portugal", color="GREEN", spinner_sec=1)
-        pi_nas_path = pi_nas_path_portugal
-        pi_nas_path_videos = pi_nas_path_videos_portugal
-        pi_nas_path_photos = pi_nas_path_photos_portugal
-    else:
-        print("No NAS path found")
-        print_txt_on_LCD3(disp, "No NAS path found", color="RED", spinner_sec=1)
-        raise Exception("No NAS mounted error")
+
 
 
 
@@ -202,6 +187,23 @@ def copying_files(disp):
 ##### MAIN SCRIPT #####
 
 # if __name__ == "__main__":
+    if is_folder_not_empty(pi_nas_path_chi):
+        print("Using NAS path in Chicago")
+        print_txt_on_LCD3(disp, "Using NAS path in Chicago", color="GREEN", spinner_sec=1)
+        pi_nas_path = pi_nas_path_chi
+        pi_nas_path_videos = pi_nas_path_videos_chi
+        pi_nas_path_photos = pi_nas_path_photos_chi
+    elif is_folder_not_empty(pi_nas_path_portugal):
+        print("Using NAS path in Portugal")
+        print_txt_on_LCD3(disp, "Using NAS path in Portugal", color="GREEN", spinner_sec=1)
+        pi_nas_path = pi_nas_path_portugal
+        pi_nas_path_videos = pi_nas_path_videos_portugal
+        pi_nas_path_photos = pi_nas_path_photos_portugal
+    else:
+        print("No NAS path found")
+        print_txt_on_LCD3(disp, "No NAS path found", color="RED", spinner_sec=1)
+        raise Exception("No NAS mounted error")
+
     mount_point = "./mnt/sdcard"
     subprocess.run(['sudo', 'umount', mount_point])
     unmntd = get_unmounted_partitions()
