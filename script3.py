@@ -22,6 +22,28 @@ def copying_files(disp):
     pi_nas_path_photos_chi = "/home/klsnkv/mounted_media/chinas/Photo library ALL/Photos a New Era"
 
 ##### LISBON #####
+    pi_nas_path_portugal = "/home/klsnkv/mounted_media/portugal_nas"
+    pi_nas_path_videos_portugal = "/home/klsnkv/mounted_media/portugal_nas/My videos"
+    pi_nas_path_photos_portugal = "/home/klsnkv/mounted_media/portugal_nas/Photo library ALL/Photos a New Era"
+
+    if is_folder_not_empty(pi_nas_path_chi):
+        print("Using NAS path in Chicago")
+        print_txt_on_LCD3(disp, "Using NAS path in Chicago", color="GREEN", spinner_sec=1)
+        pi_nas_path = pi_nas_path_chi
+        pi_nas_path_videos = pi_nas_path_videos_chi
+        pi_nas_path_photos = pi_nas_path_photos_chi
+    elif is_folder_not_empty(pi_nas_path_portugal):
+        print("Using NAS path in Portugal")
+        print_txt_on_LCD3(disp, "Using NAS path in Portugal", color="GREEN", spinner_sec=1)
+        pi_nas_path = pi_nas_path_portugal
+        pi_nas_path_videos = pi_nas_path_videos_portugal
+        pi_nas_path_photos = pi_nas_path_photos_portugal
+    else:
+        print("No NAS path found")
+        print_txt_on_LCD3(disp, "No NAS path found", color="RED", spinner_sec=1)
+        raise Exception("No NAS mounted error")
+
+
 
 ###### PATHES of SD CARD #####
     pi_sd_card_path = "/home/klsnkv/python_cron/mnt/sdcard"
@@ -83,6 +105,10 @@ def copying_files(disp):
 
 
     ####### FUNCTIONS ########
+
+    def is_folder_not_empty(path):
+        p = Path(path)
+        return p.is_dir() and any(p.iterdir())
 
     def get_unmounted_partitions():
         output = subprocess.check_output(['lsblk', '-o', 'NAME,MOUNTPOINT,TYPE', '-nr']).decode()
@@ -203,8 +229,8 @@ def copying_files(disp):
 
     print_txt_on_LCD3(disp, "lets do check of folders", color = "GREEN")
 
-    nas_video_dir = Path(pi_nas_path_videos_chi)
-    nas_photo_dir = Path(pi_nas_path_photos_chi)
+    nas_video_dir = Path(pi_nas_path_videos)
+    nas_photo_dir = Path(pi_nas_path_photos)
     sd_card_dir = Path(pi_sd_card_path)
     
     all_is_mounted = False
