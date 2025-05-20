@@ -110,7 +110,7 @@ try:
                 script3.copying_files(disp)
                 refresh_display = False
             except Exception as e:
-                print_txt_on_LCD3(disp, "Error during copying", font_size=20, color="RED", spinner_sec=3)
+                print_txt_on_LCD3(disp, f"Error during copying: {e}", font_size=20, color="RED", spinner_sec=3)
                 print("Error during copying function: ", e)
 
             
